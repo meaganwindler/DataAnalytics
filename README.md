@@ -6,4 +6,4 @@ This folder contains works samples of data analytics with:
   
 •	Excel: prescriptive analytics scenarios using Solver add-in (assignment variable, supply chain, and travel models) and PivotTables and PivotCharts
 
-•	KNIME: A report THAT explores a recent data mining project I conducted within the KNIME platform. The project was designed to use four different prediction models (two number-based and two set-based) to discover the determinants of the customer churning, which is the percentage of customers who stop using the company during a particular timeframe. 
+•	KNIME: A report that explores a recent data mining project I conducted within the KNIME platform. The project was designed to use four different prediction models (two number-based and two set-based) to discover the determinants of the customer churning, which is the percentage of customers who stop using the company during a particular timeframe. 
