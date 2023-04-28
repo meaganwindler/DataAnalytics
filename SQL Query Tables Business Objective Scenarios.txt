@@ -1,0 +1,232 @@
+--1. What are the names of customers who have sent packages (shipments) to Honolulu?
+select CustName
+from Customer
+join Shipment on Customer.CustID = Shipment.CustID
+join City on Shipment.CityID = City.CityID
+where CityName =  'Honolulu';
+
+CustName
+Danny Phillips
+Elias Garrett
+Elias Garrett
+Danny Phillips
+Danny Phillips
+
+--2. To what cities have customers with revenue less than $300,000 sent packages?
+select distinct CityName
+from City
+join Shipment on City.CityID = Shipment.CityID
+join Customer on Shipment.CustID = Customer.CustID
+where AnnualRevenue <  300000;
+
+CityName
+Little Rock
+Oakland
+Omaha
+
+--3. What are the names and populations of cities that have received shipments weighing over 1100 pounds?
+select CityName, CityPop
+from city
+join Shipment on City.CityID = Shipment.CityID
+where ShipWeight > 1100;
+
+CityName	CityPop
+Fort Worth	1933825
+El Paso	1985662
+Newark	750279
+Omaha	      3827988
+
+--4. List the names of drivers and the shipment weight for every shipment. Include in that list all drivers, even if they’ve not delivered a shipment.
+select DriverName, ShipWeight
+from Truck
+left join Shipment on Truck.TruckID = Shipment.TruckID
+
+DriverName	ShipWeight
+Jeanine Walton	399
+Jeanine Walton	817
+Jeanine Walton	759
+Claire Farrell	NULL
+Valerie Huynh	559
+Valerie Huynh	972
+Valerie Huynh	426
+Roy Massey	      622
+Forrest Baxter	101
+Forrest Baxter	922
+
+--5.List the name and truckid for every driver that has made a shipment, along each driver’s average shipment weight.
+select DriverName, Truck.TruckID, avg(ShipWeight) "Average ShipWeight"
+from Truck
+join Shipment on Truck.TruckID = Shipment.TruckID
+group by DriverName,Truck.TruckID;
+
+DriverName	TruckID	Average ShipWeight
+Jeanine Walton	1	658
+Valerie Huynh	3	652
+Roy Massey	      4	622
+Forrest Baxter	5	605
+Gerard Drake	6	487
+Gilberto Woodard	7	275
+Roberta Carroll	8	293
+Randal Anderson	9	439
+Max Peters	      10	208
+Rolando Matthews	11	644
+
+--6. Do #5 again, but this time only show the drivers having average shipment weights larger than 800 pounds. Also, give the average column the name “Average Shipment Weight” 
+select DriverName, Truck.TruckID, avg(ShipWeight) "Average Shipment Weight"
+from Truck
+join Shipment on Truck.TruckID = Shipment.TruckID
+where ShipWeight > 800
+group by DriverName,Truck.TruckID;
+
+DriverName	TruckID	Average Shipment Weight
+Jeanine Walton	1	817
+Valerie Huynh	3	972
+Forrest Baxter	5	922
+Gerard Drake	6	1065
+Lee Sanchez	      12	995
+Ty Mosley	      14	991
+Yvonne Reeves	16	1050
+Daphne Woodard	18	971
+Andrea Eaton	20	823
+Lewis Rowe	      21	983
+
+--7. Who are the customers (id, name and cityname) either: 1) have over $2 million in annual revenue and have sent shipments weighing over 900 pounds or 2) have sent a shipment to
+   --Lubbock. No duplicates please, and alphabetize the city name backwards (Z to A).
+Select distinct Customer.CustID, CustName, CityName
+from Customer
+join Shipment on Customer.CustID = Shipment.CustID
+join City on Shipment.CityID = City.CityID
+where AnnualRevenue > 2000000 and
+ShipWeight > 900 or
+CityName = 'Lubbock'
+Order by CityName desc;
+
+CustID	CustName	CityName
+13	Angelina Walker	Wichita
+10	Allison Hoffman	Washington
+2	Chester Glover	Portland
+3	Danny Phillips	New Orleans
+8	Vicki Payne	Mobile
+10	Allison Hoffman	Lubbock
+13	Angelina Walker	Fort Worth
+6	Valerie Dickerson	El Paso
+3	Danny Phillips	Anchorage
+13	Angelina Walker	Anchorage
+
+--8. Who are the drivers (by name) who have delivered shipments for customers with annual revenue over $2 million to cities with populations over 4 million?
+select DriverName
+From Truck
+join Shipment on Truck.TruckID = Shipment.TruckID
+join Customer on Shipment.CustID = Customer.CustID
+join City on Shipment.CityID = City.CityID
+where AnnualRevenue > 2000000 or 
+CityPop > 4000000;
+
+DriverName
+Damian Horton
+Andrea Eaton
+Ty Mosley
+Gerard Drake
+Ty Mosley
+Lee Sanchez
+Marco Rogers
+Gilberto Woodard
+Roberta Carroll
+Marco Rogers
+
+
+--9. List each city, by name, that has received shipments from customers having less than $1.5
+--million in annual revenue. Order these alphabetically.
+select CityName 
+from City 
+where CityID in (
+	select CityID
+	from Shipment 
+	where ShipmentID in (
+		select ShipmentID 
+		from Customer
+		where AnnualRevenue < 1500000))
+		order by CityName asc;
+
+CityName
+Anaheim
+Anchorage
+Anchorage
+Austin
+Baton Rouge
+Baton Rouge
+Boston
+Cincinnati
+Cincinnati
+Colorado
+
+--10. List the names of drivers who have delivered shipments weighing over 1100 pounds.
+select DriverName
+from Truck
+where TruckID in (
+	select TruckID
+	from Shipment 
+	where ShipWeight > 1100);
+
+DriverName
+Lee Sanchez
+Lewis Rowe
+Dwayne Arias
+Marco Rogers
+
+--11. List the name and annual revenue of customers who have sent shipments weighing under 100 pounds.
+select CustName, AnnualRevenue
+from Customer
+where CustID in (
+	select CustID
+	from Shipment
+	where ShipWeight < 100);
+
+CustName	AnnualRevenue
+Austin Chavez	3424563
+Mike Larsen	1948420
+
+--12. List the name and annual revenue of customers whose shipments have been delivered by truck driver Ty Mosley.
+select CustName, AnnualRevenue
+from Customer
+where CustID in (
+	select CustID
+	from Shipment
+	where TruckID in (
+		select TruckID
+		from Truck
+		where DriverName = 'Ty Mosley'));
+
+CustName	AnnualRevenue
+Lisa Aguilar	1199961
+Vicki Payne	3119159
+
+
+--13. Which drivers (ID and name) have not yet delivered anything?
+select *
+from Truck
+where TruckID not in (
+	select TruckID
+	from Shipment); 
+
+TruckID	DriverName
+2	Claire Farrell
+15	Donna Norris
+
+--14. Which customers (ID and name) have annual revenue greater than the average revenue of all customers (including themselves)?
+select CustID, CustName
+from Customer
+where AnnualRevenue > (
+	select avg(AnnualRevenue)
+	from Customer);
+
+CustID	CustName
+1	Lydia Lloyd
+2	Chester Glover
+4	Austin Chavez
+6	Valerie Dickerson
+8	Vicki Payne
+10	Allison Hoffman
+13	Angelina Walker
+
+
