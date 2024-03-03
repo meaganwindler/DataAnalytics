@@ -1,6 +1,6 @@
 # DataAnalytics
 
-This folder contains works samples of data analytics with:
+This folder contains works samples of data science and analytics with:
   
 SAS: In my SAS Enterprise 9.4 projects, I have developed a dynamic chart chaselist for medical providers, showcasing my adaptability with ad hoc analyses. I have also demonstrated my technical expertise in creating robust macros and custom formats within base SAS. Furthermore, my ability to streamline processes is evident in my sample project that exports a proc report directly into Excel, underscoring my proficiency in bridging SAS data analysis with accessible reporting formats.
 
