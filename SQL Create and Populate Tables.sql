@@ -1,12 +1,14 @@
+-- Sample SQL to demonstrate my ability to create and populate tables.
+
 Use m_windler
 go
 
-drop table shipment;
-drop table CustBus;
-drop table truck;
-drop table customer;
-drop table city;
-drop table BusinessLine;
+DROP TABLE shipment;
+DROP TABLE  CustBus;
+DROP TABLE  truck;
+DROP TABLE  customer;
+DROP TABLE  city;
+DROP TABLE  BusinessLine;
 
 
 CREATE TABLE businessline (
