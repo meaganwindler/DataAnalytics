@@ -1,0 +1,91 @@
+-- This code is example SQL syntax creating 6 related tables from the Data Engineer Training Plan Schema (5 dimension and 1 fact table) representing my progress is preparing for a data engineering career
+
+-- Creating the DIM_Date Table
+CREATE TABLE DIM_Date (
+    DateID INT PRIMARY KEY,
+    Date DATE,
+    Weekday VARCHAR(10),
+    Month INT,
+    Year INT,
+    Quarter INT
+);
+
+-- Creating DIM_Exam Table
+CREATE TABLE DIM_Exam (
+    ExamID INT PRIMARY KEY,
+    ExamName VARCHAR(255),
+    ExamDescription TEXT,
+    ExamCost DECIMAL(10, 2),
+    ExamURL VARCHAR(255),
+    ExamLevel VARCHAR(100),
+    ExamOrganization VARCHAR(255),
+    Skill1 INT,
+    Skill2 INT,
+    Skill3 INT,
+    ProjectedDate DATE,
+    Status VARCHAR(100)
+);
+
+-- Creating DIM_Training Table, which represents any training or classes
+CREATE TABLE DIM_Training (
+    TrainingID INT PRIMARY KEY,
+    TrainingName VARCHAR(255),
+    Platform VARCHAR(255),
+    TrainingDescription TEXT,
+    SkillLevel VARCHAR(100),
+    TrainingTime DECIMAL(10, 2),
+    ExamID INT,
+    CertificationID INT,
+    Skill1 INT,
+    Skill2 INT,
+    Skill3 INT,
+    ProjectedStartDate DATE,
+    ProjectedCompletionDate DATE,
+    ActualCompletionDate DATE,
+    FOREIGN KEY (ExamID) REFERENCES DIM_Exam(ExamID)
+);
+
+-- Create DIM_Skills Table
+CREATE TABLE DIM_Skills (
+    SkillID INT PRIMARY KEY,
+    SkillName VARCHAR(255),
+    SkillType VARCHAR(100),
+    SkillLevel VARCHAR(100),
+    SkillDescription TEXT
+);
+
+-- Create DIM_Certifications Table
+CREATE TABLE DIM_Certifications (
+    CertificationID INT PRIMARY KEY,
+    CertificationName VARCHAR(255),
+    CertificationDescription TEXT,
+    CertificationCost DECIMAL(10, 2),
+    CertificationURL VARCHAR(255),
+    CertificationLevel VARCHAR(100),
+    CertificationOrganization VARCHAR(255),
+    Skill1 INT,
+    Skill2 INT,
+    Skill3 INT,
+    ProjectedDate DATE,
+    Status VARCHAR(100),
+    FOREIGN KEY (Skill1) REFERENCES DIM_Skills(SkillID),
+    FOREIGN KEY (Skill2) REFERENCES DIM_Skills(SkillID),
+    FOREIGN KEY (Skill3) REFERENCES DIM_Skills(SkillID)
+);
+
+-- Create FACT_TrainingProgress Table
+CREATE TABLE FACT_TrainingProgress (
+    ProgressID INT PRIMARY KEY,
+    TrainingID INT,
+    DateID INT,
+    HoursSpent DECIMAL(10, 2),
+    Status VARCHAR(255),
+    Skill1 INT,
+    Skill2 INT,
+    Skill3 INT,
+    FOREIGN KEY (TrainingID) REFERENCES DIM_Training(TrainingID),
+    FOREIGN KEY (DateID) REFERENCES DIM_Date(DateID),
+    FOREIGN KEY (Skill1) REFERENCES DIM_Skills(SkillID),
+    FOREIGN KEY (Skill2) REFERENCES DIM_Skills(SkillID),
+    FOREIGN KEY (Skill3) REFERENCES DIM_Skills(SkillID)
+);
