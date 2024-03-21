@@ -1,0 +1,20 @@
+-- Sample SQL to demonstrate my use of Case statements to track learner completion data
+
+-- Using a table structure for training_data as follows:
+-- participant_id (INT), module_name (VARCHAR), completion_status (VARCHAR), score (INT)
+
+SELECT
+  module_name,
+  completion_status,
+  -- Now I categorize based on completion status and score
+  CASE
+    WHEN completion_status = 'Completed' AND score >= 90 THEN 'Highly Proficient'
+    WHEN completion_status = 'Completed' AND score >= 75 THEN 'Proficient'
+    WHEN completion_status = 'Completed' THEN 'Completed with Improvement Needed'
+    ELSE 'Not Completed or No Score'
+  END AS performance_category,
+  COUNT(participant_id) AS number_of_participants,
+  AVG(score) AS average_score
+FROM training_data
+GROUP BY module_name, completion_status, performance_category
+ORDER BY module_name, completion_status;
